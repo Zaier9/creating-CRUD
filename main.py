@@ -24,10 +24,13 @@ def create_client(client):
         clients.append(client)
     
     else:
-        print("Client already is in the client\'s list")
+        print("Client already is in the client's list")
 
 
 def list_clients():
+    print('uid | name | company | email | position ')
+    print('*' * 50)
+
     for idx, client in enumerate(clients):
         print('{uid} | {name} | {company} | {email} | {position}'.format(
             uid=idx,
@@ -63,13 +66,14 @@ def search_client(client_name):
             return True
 
 
-def _get_client_field(field_name, message='What is the client {}?'):
+def _get_client_field(field_name, message='What is the client {}? --> '):
     field = None
 
     while not field:
         field = input(message.format(field_name))
 
     return field
+
 
 def _get_client_from_user():
     client = {
