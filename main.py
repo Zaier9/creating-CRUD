@@ -1,4 +1,3 @@
-import sys
 import csv
 import os
 
@@ -18,13 +17,13 @@ def _initialize_clients_from_storage():
 
 
 def _save_clients_to_storage():
-    _tmp_table_name = '{}.tmp'.format(CLIENT_TABLE)
+    tmp_table_name = '{}.tmp'.format(CLIENT_TABLE)
     with open(tmp_table_name, mode='w') as f:
         writer = csv.DictWriter(f, fieldnames=CLIENT_SCHEMA)
         writer.writerows(clients)
 
         os.remove(CLIENT_TABLE)
-        os.rename(_tmp_table_name, CLIENT_TABLE)
+        os.rename(tmp_table_name, CLIENT_TABLE)
 
 
 
@@ -51,19 +50,19 @@ def list_clients():
             position=client['position']))
 
 
-def update_client(client_id, updated_client):
+def updated_client(client_name, updated_client):
     global clients
 
-    if len(clients) - 1 >= client_id:
-        clients[client_id] = updated_client
+    if len(clients) - 1 >= client_name:
+        clients[client_name] = updated_client
     else:
         print("Client is not in client's list")
 
 
-def delete_client(client_id):
+def delete_client(client_name):
     global clients
     for idx, client in enumerate(clients):
-        if idx == client_id:
+        if idx == client_name:
             del clients[idx]
             break
 
@@ -77,11 +76,11 @@ def search_client(client_name):
             return True
 
 
-def _get_client_field(field_name, message='What is the client {}? --> '):
+def _get_client_name(message='What is the client {}? --> '):
     field = None
 
     while not field:
-        field = input(message.format(field_name))
+        field = input(message.format(client_name))
 
     return field
 
@@ -124,16 +123,15 @@ if __name__ == '__main__':
     elif command == 'L':
         list_clients()
     elif command == 'U':
-        client_id = int(_get_client_field('id'))
-        updated_client = _get_client_from_user()
+        client_name = _get_client_name()
+        update_name = input("What is your client name? --> ")
 
-        update_client(client_id, updated_client)
+        updated_client(client_name, update_name)
     elif command == 'D':
-        client_id = int(_get_client_field('id'))
-
-        delete_client(client_id)
+        client_name = _get_client_name()
+        delete_client(client_name)
     elif command == 'S':
-        client_name = _get_client_field('name')
+        client_name = _get_client_name()
         found = search_client(client_name)
 
         if found:
